@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="jquery.min.js"></script>
+<script src="Chart.min.js"></script>
+<title>智能分析</title>
+</head>
+<body>
+
+			<img hidefocus="true" src="casco.jpg" width="80" height="40" align="right" style="position: absolute; top:0;right:0">
+			<p align="center"><b style="font-size: 24px">监测数据分析报告</b></p>
+			<p align="center"><b>异常比例图</b></p>
+			<p align="center"><canvas id="myPieChart"></canvas></p>
+			<p><p><p>
+	<script type="text/javascript">
+		var index = 1;
+		function showresult(data) {
+			if(data.is_bj==true){
+				$("body").append('<p align="center"><b>' + data.title + '</b></p>');
+				$("body").append('<p align="center">' + data.dsp + '</p>');
+				$("body")
+						.append(
+								'<div style="text-align: center"><canvas id="myChart'+index+'" width="1200" height="400"></canvas></div>');
+				$("body").append('<p><p><p>');
+				var options = {
+
+					scaleOverride: true,
+
+					scaleSteps: 5,
+					scaleStepWidth: 10,
+					scaleStartValue: 0,
+					scaleLineColor: "rgba(0,0,0,1)",
+					scaleLineWidth: 1,
+					scaleShowLabels: true,
+					scaleLabel: "<%=value%>",
+					scaleFontSize: 12,
+					scaleFontStyle: "normal",
+					scaleFontColor: "#666",
+					scaleShowGridLines: true,
+					scaleGridLineColor: "rgba(0,0,0,.1)",
+					scaleGridLineWidth: 1,
+					bezierCurve: false,
+					pointDot: true,
+					pointDotRadius: 3,
+					pointDotStrokeWidth: 1,
+					datasetStrokeWidth: 3,
+					datasetFill: true,
+					animation: true,
+					animationSteps: 60,
+					animationEasing: "easeOutQuart",
+				}
+				var d = {
+					labels: data.date,
+					datasets: [{
+						fillColor: "rgba(151,187,205,0.5)",
+						strokeColor: "rgba(151,187,205,1)",
+						pointColor: "rgba(151,187,205,1)",
+						pointStrokeColor: "#fff",
+						data: data.data
+					}]
+				}
+				//Get context with jQuery - using jQuery's .get() method.
+				var ctx = $("#myChart" + index).get(0).getContext("2d");
+				//This will get the first returned node in the jQuery collection.
+				var myNewChart = new Chart(ctx);
+				new Chart(ctx).Line(d, options);
+
+				index++;
+			}
+			
+		}
+		$(function() {
+			var data = JSON.parse(localStorage.allreport).results;
+			var bjnum = 0;
+			for(var i in data){
+				if(data[i].is_bj){
+					bjnum++;
+				}
+			}
+			var d = [{
+				value: bjnum,
+				color: "#F7464A",
+				highlight: "#FF5A5E",
+				label: "Red"
+			}, {
+				value: data.length-bjnum,
+				color: "#46BFBD",
+				highlight: "#5AD3D1",
+				label: "Green"
+			}]
+
+			var ctx = $("#myPieChart").get(0).getContext("2d");
+			var myPieChart = new Chart(ctx).Pie(d);
+
+			for ( var i in data) {
+				showresult(data[i]);
+			}
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="jquery.min.js"></script>
+<script src="Chart.min.js"></script>
+<title>智能分析</title>
+<script type="text/javascript">
+$(function () {
+	var allData=[{
+		name:'test0',
+		time:'20150930',
+		data:[[1,1,1],[1,2,3]]
+	},{
+		name:'test1',
+		time:'20150930',
+		data:[[1,1,2],[1,14,2],[14,1,2],[14,14,2],[3,14,3],[3,13,5],[3,12.1,2],[3,8.2,4],[3,5,6],[3,2.1,2],[3,4.2,3],[2,1,2]
+        ,[5,1,2],[6,14,2],[7.1,1,2],[8.2,1,2],[4.1,12,2],[14,1.2,2],[8,1,2],[7,10,2],[2.5,1,1],[3.1,4.2,2],[5.7,6.1,2],[10,1,2]
+        ,[3,1.2,2],[3,4.1,2],[3.2,5.8,2],[8,1,2],[8,2.1,3],[8,3.2,2],[8,4,2],[8,4.9,8],[8.2,6.1,5],[8.1,7.1,6],[8,8,4],[8,9.1,2],[8,10,1],[8,11,2],[8,12,3]
+        ,[8,13,3],[8,14,5],[6.2,7,2],[7.2,10,2],[5.1,14,2],[14,2.2,2],[1,2.2,1],[4,11,2],[6,3,2],[4,7,2],[9,12,2],[10,3,2],[1,9,1],[7,2,2],[12,5,2]
+        ,[1,1,1],[1,14,1],[14,1,1],[1,1,1],[1,14,1],[14,1,1],[1,1,1],[1,14,1],[10,9,8],[1,1,1],[1,14,1],[14,1,1],[1,1,1],[1,14,1],[14,1,1]
+        ,[1,1,1],[4,11,2],[14,1,1],[1,1,1],[1,14,1],[14,1,1],[1,1,1],[1,14,1],[14,1,1],[1,1,1],[1,14,1],[14,1,1],[1,1,1],[1,14,1],[14,1,1]
+        ,[1,1,1],[1,14,1],[14,1,1],[1,1,1],[1,14,1],[14,1,1],[1,1,1],[1,14,1],[14,1,1],[1,1,1],[1,14,1],[14,1,1]]
+	}];
+	var clasfyData=[{
+        size:7,
+        color:'#CC0000',
+	    data:[]
+	},{
+		size:6,
+		color:'#FF6600',
+    	data:[]
+	},{
+		size:4,
+		color:'#FFCC66',
+    	data:[]
+	},{
+		size:2,
+		color:'#339900',
+    	data:[]
+	}
+	                ];
+	
+	function classifyData(inData,outData)
+	{
+		var int0,int1,int2,int3;
+		int0=0;
+		int1=0;
+		int2=0;
+		int3=0;
+		for(items in inData){
+			for(itemsData in inData[items].data){
+				if(inData[items].data[itemsData][2]>6){
+					outData[0].data[int0]=inData[items].data[itemsData];
+					int0++;
+				}else if(inData[items].data[itemsData][2]>4&&inData[items].data[itemsData][2]<=6){
+					outData[1].data[int1]=inData[items].data[itemsData];
+					int1++;
+				}else if(inData[items].data[itemsData][2]>2&&inData[items].data[itemsData][2]<=4){
+					outData[2].data[int2]=inData[items].data[itemsData];
+					int2++;
+				}else if(inData[items].data[itemsData][2]>0&&inData[items].data[itemsData][2]<=2){
+					outData[3].data[int3]=inData[items].data[itemsData];
+					int3++;
+				}
+			}
+		}
+	}
+	classifyData(allData,clasfyData);
+	//console.log(allData[0].name);
+	//console.log(allData[1].data);
+	console.log(clasfyData[1].data);
+	$(function () {
+	    $('#container').highcharts({
+
+		    chart: {
+		        type: 'bubble',
+		        zoomType: 'xy',
+		        height: 600,
+		        width:1000
+		    },
+
+		    title: {
+		    	text: '一号线Omas日志列次分析结果图'
+		    },
+		    plotOptions: {
+	            bubble: {
+	                minSize: 1,
+	                maxSize: 20
+	            }
+	        },
+	        
+		    xAxis: {
+	            title: {
+	                enabled: true,
+	                text: '车次'
+	            },
+	            
+				 max:15,
+		         min:0,
+		         tickInterval: 1,
+	            labels: {
+	            	step:0.5,
+	                formatter:function(){
+	                  if(this.value>0&&this.value <=1) { 
+	                    return "1401";
+	                  }else if(this.value >1 && this.value <=2) { 
+	                    return "1405"; 
+	                  }else if(this.value >2 && this.value <=3) { 
+	                    return "1409"; 
+	                  }else if(this.value >3 && this.value <=4) { 
+	                    return "1420"; 
+	                  }else if(this.value >4 && this.value <=5) { 
+	                    return "1437"; 
+	                  }else if(this.value >5 && this.value <=6) { 
+	                    return "1455"; 
+	                  }else if(this.value >6 && this.value <=7) { 
+	                    return "1465"; 
+	                  }else if(this.value >7 && this.value <=8) { 
+	                    return "1472"; 
+	                  }else if(this.value >8 && this.value <=9) { 
+	                    return "1426"; 
+	                  }else if(this.value >9 && this.value <=10) { 
+	                    return "1488"; 
+	                  }else if(this.value >10 && this.value <=11) { 
+	                    return "1425"; 
+	                  }else if(this.value >11&& this.value <=12) { 
+	                    return "1402"; 
+	                  }else if(this.value >12 && this.value <=13) { 
+	                    return "1439"; 
+	                  }else if(this.value >13 && this.value <=14) { 
+	                    return "1485"; 
+	                  }else { 
+	                    return "";
+	                  }
+	                }
+	              },
+		    
+	            //categories: ['1401', '1405', '1409','1410', '1413', '1415','1419', '1420', '1425','1429', '1431', '1431']
+	        },
+	        yAxis: {
+	            title: {
+	                text: '设备名'
+	            },
+	            max:15,
+	            min:0,
+	            tickInterval: 1,
+	            labels: {
+	            	step:1,
+	                formatter:function(){
+	                  if(this.value>0&&this.value <=1) { 
+	                    return "GC1101";
+	                  }else if(this.value >1 && this.value <=2) { 
+	                    return "GC2102"; 
+	                  }else if(this.value >2 && this.value <=3) { 
+	                    return "G1683"; 
+	                  }else if(this.value >3 && this.value <=4) { 
+	                    return "GZ0124"; 
+	                  }else if(this.value >4 && this.value <=5) { 
+	                    return "GC2602"; 
+	                  }else if(this.value >5 && this.value <=6) { 
+	                    return "G5186"; 
+	                  }else if(this.value >6 && this.value <=7) { 
+	                    return "G2268"; 
+	                  }else if(this.value >7 && this.value <=8) { 
+	                    return "GC4188"; 
+	                  }else if(this.value >8 && this.value <=9) { 
+	                    return "3C0403-0409"; 
+	                  }else if(this.value >9 && this.value <=10) { 
+	                    return "3C0501-0507"; 
+	                  }else if(this.value >10 && this.value <=11) { 
+	                    return "14-15DG"; 
+	                  }else if(this.value >11&& this.value <=12) { 
+	                    return "23-45IG"; 
+	                  }else if(this.value >12 && this.value <=13) { 
+	                    return "G3322"; 
+	                  }else if(this.value >13 && this.value <=14) { 
+	                    return "GC5143"; 
+	                  }else { 
+	                    return "";
+	                  }
+	                }
+	              },
+	        },
+		    series: [{name:'一级报警',
+		        data: clasfyData[0].data,
+		        color:clasfyData[0].color
+		    },{
+		    	name:'二级报警',
+		        data: clasfyData[1].data,
+		        color:clasfyData[1].color
+		    },{
+		    	name:'三级报警',
+		        data: clasfyData[2].data,
+		        color:clasfyData[2].color
+		    },{
+		    	name:'预警',
+		        data: clasfyData[3].data,
+		        color:clasfyData[3].color
+		    }
+			],
+	        tooltip: {
+	            /* headerFormat: '<b>{series.name}</b><br>',
+	            pointFormat: '共发生{point.z}次错误报警', */
+	            formatter:function(){
+	            	var devName="";
+	            	var trainName="";
+	            	 if(this.point.y>0&&this.point.y <=1) { 
+	            		 devName="GC1101";
+		                  }else if(this.point.y>1 && this.point.y <=2) { 
+		                	devName="GC2102"; 
+		                  }else if(this.point.y >2 && this.point.y <=3) { 
+		                	  devName= "G1683"; 
+		                  }else if(this.point.y >3 && this.point.y <=4) { 
+		                	  devName= "GZ0124"; 
+		                  }else if(this.point.y >4 && this.point.y<=5) { 
+		                	  devName= "GC2602"; 
+		                  }else if(this.point.y >5 && this.point.y<=6) { 
+		                	  devName= "G5186"; 
+		                  }else if(this.point.y>6 && this.point.y<=7) { 
+		                	  devName= "G2268"; 
+		                  }else if(this.point.y>7 && this.point.y<=8) { 
+		                	  devName= "GC4188"; 
+		                  }else if(this.point.y >8 && this.point.y <=9) { 
+		                	  devName="3C0403-0409"; 
+		                  }else if(this.point.y >9 && this.point.y <=10) { 
+		                	  devName="3C0501-0507"; 
+		                  }else if(this.point.y >10 && this.point.y <=11) { 
+		                	  devName="14-15DG"; 
+		                  }else if(this.point.y >11&& this.point.y <=12) { 
+		                	  devName="23-45IG"; 
+		                  }else if(this.point.y >12 && this.point.y<=13) { 
+		                	  devName="G3322"; 
+		                  }else if(this.point.y >13 && this.point.y <=14) { 
+		                	  devName="GC5143"; 
+		                  }else { 
+		                	  devName="";
+		                  };
+		                  if(this.point.x>0&&this.point.x <=1) { 
+			                    trainName= "1401";
+			                  }else if(this.point.x>1 && this.point.x<=2) { 
+			                	  trainName= "1405"; 
+			                  }else if(this.point.x>2 && this.point.x<=3) { 
+			                	  trainName= "1409"; 
+			                  }else if(this.point.x>3 && this.point.x<=4) { 
+			                	  trainName= "1420"; 
+			                  }else if(this.point.x>4 &&this.point.x <=5) { 
+			                	  trainName= "1437"; 
+			                  }else if(this.point.x >5 && this.point.x <=6) { 
+			                	  trainName="1455"; 
+			                  }else if(this.point.x>6 && this.point.x <=7) { 
+			                	  trainName="1465"; 
+			                  }else if(this.point.x>7 && this.point.x <=8) { 
+			                	  trainName= "1472"; 
+			                  }else if(this.point.x >8 && this.point.x <=9) { 
+			                	  trainName="1426"; 
+			                  }else if(this.point.x >9 && this.point.x <=10) { 
+			                	  trainName= "1488"; 
+			                  }else if(this.point.x >10 && this.point.x <=11) { 
+			                	  trainName="1425"; 
+			                  }else if(this.point.x>11&& this.point.x <=12) { 
+			                	  trainName="1402"; 
+			                  }else if(this.point.x >12 && this.point.x <=13) { 
+			                	  trainName="1439"; 
+			                  }else if(this.point.x >13 && this.point.x <=14) { 
+			                	  trainName="1485"; 
+			                  }else { 
+			                	  trainName= "";
+			                  }
+					return '时间:' + this.series.name + '<br>'+'设备:'+devName+'<br>'+'车次:'+trainName+'<br>'+'报警次数:' + this.point.z;
+				}
+	        }
+		
+		});
+	    
+	});
+});
+</script>
+</head>
+<body>
+
+			<img src="casco.jpg" width="80" height="40" align="right" style="position: absolute; top:0;right:0">
+			<p align="center"><b style="font-size: 24px">监测数据分析报告</b></p>
+	<script type="text/javascript">
+		var index = 1;
+		function showresult(data) {
+			$("body").append('<p align="center"><b>' + data.title + '</b></p>');
+			$("body")
+					.append(
+							'<p align="center"><canvas id="myChart'+index+'"></canvas><p>');
+			$("body").append('<p><p><p>');
+			var d = [{
+				value: data.ext_total,
+				color: "#F7464A",
+				highlight: "#FF5A5E",
+				label: "Red"
+			}, {
+				value: data.total-data.ext_total,
+				color: "#46BFBD",
+				highlight: "#5AD3D1",
+				label: "Green"
+			}]
+			var ctx = $("#myChart"+index).get(0).getContext("2d");
+			var myPieChart = new Chart(ctx).Pie(d);
+
+			index++;
+		}
+		$(function() {
+			var data = JSON.parse(localStorage.allrizhi).results;
+
+			for ( var i in data) {
+				showresult(data[i]);
+			}
+			$("body").append('<div id="container" style="min-width: 310px; height: 600px; max-width: 1000px; margin: 0 auto"></div>');
+		});
+	</script>
+	<script src="highcharts.js"></script>
+	<script src="exporting.js"></script>
+	<script src="highcharts-more.js"></script>
+	<!-- <div id="container" style="min-width: 310px; height: 600px; max-width: 1000px; margin: 0 auto"></div> -->
+</body>
+</html>
