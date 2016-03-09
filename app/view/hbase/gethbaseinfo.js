@@ -98,11 +98,45 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 			tbar: [{
 				xtype: 'button',
 				text: '暂时挂起数据表',
-				handler: function() {}
+				handler: function() {
+					Ext.Ajax.request({
+						url: 'http://hadoop:8080/cascoweb/restdqtx',
+						method: 'post',
+						jsonData: {method: 'disabletable'},
+						callback: function(a, b, response) {
+							var parsed = Ext.decode(response.responseText).result;
+							historyStore.setData(parsed);
+						}
+					});
+				}
+			},{
+				xtype: 'button',
+				text: '启用数据表',
+				handler: function() {
+					Ext.Ajax.request({
+						url: 'http://hadoop:8080/cascoweb/restdqtx',
+						method: 'post',
+						jsonData: {method: 'enabletable'},
+						callback: function(a, b, response) {
+							var parsed = Ext.decode(response.responseText).result;
+							historyStore.setData(parsed);
+						}
+					});
+				}
 			},{
 				xtype: 'button',
 				text: '删除数据表',
-				handler: function() {}
+				handler: function() {
+					Ext.Ajax.request({
+						url: 'http://hadoop:8080/cascoweb/restdqtx',
+						method: 'post',
+						jsonData: {method: 'droptable'},
+						callback: function(a, b, response) {
+							var parsed = Ext.decode(response.responseText).result;
+							historyStore.setData(parsed);
+						}
+					});
+				}
 			
 			}],
 			listeners: {
