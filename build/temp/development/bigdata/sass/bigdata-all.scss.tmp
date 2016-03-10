@@ -882,6 +882,7 @@ $include-bigdata-application: dynamic(true);;
 $include-bigdata-store-personnel: dynamic(true);;
 $include-bigdata-view-analysis-dqtx: dynamic(true);;
 $include-bigdata-view-analysis-rizhi: dynamic(true);;
+$include-bigdata-view-hbase-addtables: dynamic(true);;
 $include-bigdata-view-hbase-gethbaseinfo: dynamic(true);;
 $include-bigdata-view-main-list: dynamic(true);;
 $include-bigdata-view-main-main: dynamic(true);;

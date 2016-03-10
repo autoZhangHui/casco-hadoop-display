@@ -57,15 +57,9 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 		    	xtype: 'button',
 		    	text: '新建数据表',
 		    	handler: function(){
-		    		Ext.Ajax.request({
-						url: 'http://hadoop:8080/cascoweb/restdqtx',
-						method: 'post',
-						jsonData: {method: 'gethabseinfo'},
-						callback: function(a, b, response) {
-							var parsed = Ext.decode(response.responseText).result;
-							historyStore.setData(parsed);
-						}
-					});
+					var addtables = Ext.create('bigdata.view.hbase.addtables', {type: 'rzall'});
+					addtables.show();
+				
 		    	}
 		    
 		    }]
