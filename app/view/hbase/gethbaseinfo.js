@@ -13,7 +13,7 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 			jsonData: {method: 'gethabseinfo'},
 			callback: function(a, b, response) {
 				var parsed = Ext.decode(response.responseText).result;
-				historyStore.setData(parsed);
+				historyStore.setHbaseTableData(parsed);
 			}
 		});
 		me.items = [{
@@ -49,7 +49,7 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 						jsonData: {method: 'gethabseinfo'},
 						callback: function(a, b, response) {
 							var parsed = Ext.decode(response.responseText).result;
-							historyStore.setData(parsed);
+							historyStore.setHbaseTableData(parsed);
 						}
 					});
 		    	}
@@ -57,7 +57,7 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 		    	xtype: 'button',
 		    	text: '新建数据表',
 		    	handler: function(){
-					var addtables = Ext.create('bigdata.view.hbase.addtables', {type: 'rzall'});
+					var addtables = Ext.create('bigdata.view.hbase.addtables');
 					addtables.show();
 				
 		    	}
@@ -66,37 +66,36 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 		},{
 			xtype: 'grid',
 			region: 'center',
-			title: '分析结果',
+			title: '数据表描述',
 			id: 'tabledetail',
 			store: Ext.create('Ext.data.Store'),
 			columns: [{
-				text: '标题',
-				dataIndex: 'title'
+				text: '表名称',
+				dataIndex: 'tablename'
 			},{
-				text: '描述',
-				dataIndex: 'dsp',
+				text: '所属车站',
+				dataIndex: 'station',
 				flex: 1
+			},{
+				text: '日期',
+				dataIndex: 'date'
 			},{
 				text: '设备',
 				dataIndex: 'device'
-			},{
-				text: '车站',
-				dataIndex: 'station'
-			},{
-				text: '结果',
-				dataIndex: 'is_bj',
-				renderer: function(v){
-					return v?'异常':'正常';
-				}
 			}],
 			tbar: [{
 				xtype: 'button',
 				text: '暂时挂起数据表',
 				handler: function() {
+					//可以考虑Ext.getCmp().getstore().getdata()或者其他方法来实现
+					var data={
+						method: 'disabletable',
+						tablename:Ext.getCmp('tabledetals').getStore().getData().get('tablename')
+					};
 					Ext.Ajax.request({
 						url: 'http://hadoop:8080/cascoweb/restdqtx',
 						method: 'post',
-						jsonData: {method: 'disabletable'},
+						jsonData: data,
 						callback: function(a, b, response) {
 							var parsed = Ext.decode(response.responseText).result;
 							historyStore.setData(parsed);
