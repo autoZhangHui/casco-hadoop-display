@@ -398,7 +398,7 @@ Ext.define('bigdata.view.analysis.Dqtx', {
 
 			    		myMask.show();
 						Ext.Ajax.request({
-							url: 'http://hadoop:8080/cascoweb/restdqtx',
+							url: 'http://hadoop:8080/cascoweb/backrestapi',
 							method: 'post',
 							jsonData: data,
 							callback: function(a, b, response) {

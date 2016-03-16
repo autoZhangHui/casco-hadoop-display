@@ -8,9 +8,9 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 		var me = this;
 		var historyStore = Ext.create('Ext.data.Store');
 		Ext.Ajax.request({
-			url: 'http://hadoop:8080/cascoweb/restdqtx',
+			url: 'http://hadoop:8080/cascoweb/backrestapi',
 			method: 'post',
-			jsonData: {method: 'gethabseinfo'},
+			jsonData: {method: 'gethabseinfo',tablename:'htablesInAll'},
 			callback: function(a, b, response) {
 				var parsed = Ext.decode(response.responseText).result;
 				historyStore.setHbaseTableData(parsed);
@@ -44,9 +44,9 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 		    	text: '刷新',
 		    	handler: function(){
 		    		Ext.Ajax.request({
-						url: 'http://hadoop:8080/cascoweb/restdqtx',
+						url: 'http://hadoop:8080/cascoweb/backrestapi',
 						method: 'post',
-						jsonData: {method: 'gethabseinfo'},
+						jsonData: {method: 'gethabseinfo',tablename:'htablesInAll'},
 						callback: function(a, b, response) {
 							var parsed = Ext.decode(response.responseText).result;
 							historyStore.setHbaseTableData(parsed);
@@ -93,7 +93,7 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 						tablename:Ext.getCmp('tabledetals').getStore().getData().get('tablename')
 					};
 					Ext.Ajax.request({
-						url: 'http://hadoop:8080/cascoweb/restdqtx',
+						url: 'http://hadoop:8080/cascoweb/backrestapi',
 						method: 'post',
 						jsonData: data,
 						callback: function(a, b, response) {
@@ -107,7 +107,7 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 				text: '启用数据表',
 				handler: function() {
 					Ext.Ajax.request({
-						url: 'http://hadoop:8080/cascoweb/restdqtx',
+						url: 'http://hadoop:8080/cascoweb/backrestapi',
 						method: 'post',
 						jsonData: {method: 'enabletable'},
 						callback: function(a, b, response) {
@@ -121,7 +121,7 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 				text: '删除数据表',
 				handler: function() {
 					Ext.Ajax.request({
-						url: 'http://hadoop:8080/cascoweb/restdqtx',
+						url: 'http://hadoop:8080/cascoweb/backrestapi',
 						method: 'post',
 						jsonData: {method: 'droptable'},
 						callback: function(a, b, response) {

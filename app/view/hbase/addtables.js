@@ -47,7 +47,7 @@ Ext.define('bigdata.view.hbase.addtables', {
 										cf3:Ext.getCmp('family3').getValue()
 									};
 									Ext.Ajax.request({
-										url: 'http://hadoop:8080/cascoweb/restdqtx',
+										url: 'http://hadoop:8080/cascoweb/backrestapi',
 										method: 'post',
 										jsonData: data,
 										callback: function(a, b, response) {

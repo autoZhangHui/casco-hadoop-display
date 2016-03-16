@@ -8,7 +8,7 @@ Ext.define('bigdata.view.result.History', {
 		var me = this;
 		var historyStore = Ext.create('Ext.data.Store');
 		Ext.Ajax.request({
-			url: 'http://hadoop:8080/cascoweb/restdqtx',
+			url: 'http://hadoop:8080/cascoweb/backrestapi',
 			method: 'post',
 			jsonData: {method: 'history'},
 			callback: function(a, b, response) {
@@ -40,7 +40,7 @@ Ext.define('bigdata.view.result.History', {
 		    	text: '刷新',
 		    	handler: function(){
 		    		Ext.Ajax.request({
-						url: 'http://hadoop:8080/cascoweb/restdqtx',
+						url: 'http://hadoop:8080/cascoweb/backrestapi',
 						method: 'post',
 						jsonData: {method: 'history'},
 						callback: function(a, b, response) {
