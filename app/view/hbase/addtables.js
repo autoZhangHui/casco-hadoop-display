@@ -51,8 +51,8 @@ Ext.define('bigdata.view.hbase.addtables', {
 										method: 'post',
 										jsonData: data,
 										callback: function(a, b, response) {
-											var parsed = Ext.decode(response.responseText).result;
-											historyStore.setData(parsed);
+											//var parsed = Ext.decode(response.responseText).result;
+											//historyStore.setData(parsed);
 										}
 									});								
 									me.close();

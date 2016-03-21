@@ -7,13 +7,30 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 	initComponent: function(){
 		var me = this;
 		var historyStore = Ext.create('Ext.data.Store');
+		//local testing code
+		// var testdata=[{rowkey:'123',
+		// 	  states:'12131',
+		// 	  st_ch:'1213',
+		// 	  create_time:'201207',
+		// 	  end_time:'120301',
+		// 	  var_ch:'1231'
+		// 	},
+		// 	{rowkey:'123',
+		// 	  states:'12131',
+		// 	  st_ch:'1213',
+		//    	  create_time:'201208',
+		// 	  end_time:'120301',
+		// 	  var_ch:'1231'}
+		// 	];
+		// historyStore.setData(testdata);
+		//console.log(historyStore);
 		Ext.Ajax.request({
 			url: 'http://hadoop:8080/cascoweb/backrestapi',
 			method: 'post',
-			jsonData: {method: 'gethabseinfo',tablename:'htablesInAll'},
+			jsonData: {method: 'gethbaseinfo',tablename:'htablesInAll'},
 			callback: function(a, b, response) {
 				var parsed = Ext.decode(response.responseText).result;
-				historyStore.setHbaseTableData(parsed);
+				historyStore.setData(parsed);
 			}
 		});
 		me.items = [{
@@ -26,17 +43,29 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 	        store: historyStore,
 			columns: [{
 				text: '数据表名称',
-				dataIndex: 'tablename',
+				dataIndex: 'rowkey',
 				flex: 1
 			},{
 				text:'数据表状态',
-				dataIndex:'tablestates',
+				dataIndex:'states',
+				flex:2
+			},{
+				text:'所属车站',
+				dataIndex:'st_ch',
 				flex:2
 			}],
 			listeners: {
-		        itemclick: function(view, record, item, index, e, eOpts){
-					localStorage.allreport = JSON.stringify({results: record.getData().data});
-		        	Ext.getCmp('tabledetail').getStore().setData(record.get('data'));
+		        itemclick: function(view, record, item, index, e, eOpts){        	
+					var jsonData=[{
+						tablename:record.get('rowkey'),
+						st_ch:record.get('st_ch'),
+						var_ch:record.get('var_ch'),
+						create_time:record.get('create_time'),
+						end_time:record.get('end_time')
+					}];
+					console.log(jsonData);
+		        	Ext.getCmp('tabledetails').getStore().setData(jsonData);
+
 		    	}
 		    },
 		    tbar: [{
@@ -49,7 +78,7 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 						jsonData: {method: 'gethabseinfo',tablename:'htablesInAll'},
 						callback: function(a, b, response) {
 							var parsed = Ext.decode(response.responseText).result;
-							historyStore.setHbaseTableData(parsed);
+							historyStore.setData(parsed);
 						}
 					});
 		    	}
@@ -67,21 +96,24 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 			xtype: 'grid',
 			region: 'center',
 			title: '数据表描述',
-			id: 'tabledetail',
+			id: 'tabledetails',
 			store: Ext.create('Ext.data.Store'),
 			columns: [{
 				text: '表名称',
 				dataIndex: 'tablename'
 			},{
 				text: '所属车站',
-				dataIndex: 'station',
+				dataIndex: 'st_ch',
 				flex: 1
 			},{
-				text: '日期',
-				dataIndex: 'date'
+				text: '开始日期',
+				dataIndex: 'create_time'
 			},{
-				text: '设备',
-				dataIndex: 'device'
+				text: '结束日期',
+				dataIndex: 'end_time'
+			},{
+				text: '变量类型',
+				dataIndex: 'var_ch'
 			}],
 			tbar: [{
 				xtype: 'button',
@@ -90,15 +122,15 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 					//可以考虑Ext.getCmp().getstore().getdata()或者其他方法来实现
 					var data={
 						method: 'disabletable',
-						tablename:Ext.getCmp('tabledetals').getStore().getData().get('tablename')
+						tablename:Ext.getCmp('tabledetails').getStore().getData().get('rowkey')
 					};
 					Ext.Ajax.request({
 						url: 'http://hadoop:8080/cascoweb/backrestapi',
 						method: 'post',
 						jsonData: data,
 						callback: function(a, b, response) {
-							var parsed = Ext.decode(response.responseText).result;
-							historyStore.setData(parsed);
+							// var parsed = Ext.decode(response.responseText).result;
+							// historyStore.setData(parsed);
 						}
 					});
 				}
@@ -106,13 +138,17 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 				xtype: 'button',
 				text: '启用数据表',
 				handler: function() {
+					var data={
+						method: 'enabletable',
+						tablename:Ext.getCmp('tabledetails').getStore().getData().get('rowkey')
+					};
 					Ext.Ajax.request({
 						url: 'http://hadoop:8080/cascoweb/backrestapi',
 						method: 'post',
-						jsonData: {method: 'enabletable'},
+						jsonData: data,
 						callback: function(a, b, response) {
-							var parsed = Ext.decode(response.responseText).result;
-							historyStore.setData(parsed);
+							// var parsed = Ext.decode(response.responseText).result;
+							// historyStore.setData(parsed);
 						}
 					});
 				}
@@ -120,13 +156,17 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 				xtype: 'button',
 				text: '删除数据表',
 				handler: function() {
+					var data={
+						method: 'enabletable',
+						tablename:Ext.getCmp('tabledetails').getStore().getData().get('rowkey')
+					};
 					Ext.Ajax.request({
 						url: 'http://hadoop:8080/cascoweb/backrestapi',
 						method: 'post',
-						jsonData: {method: 'droptable'},
+						jsonData: data,
 						callback: function(a, b, response) {
-							var parsed = Ext.decode(response.responseText).result;
-							historyStore.setData(parsed);
+							// var parsed = Ext.decode(response.responseText).result;
+							// historyStore.setData(parsed);
 						}
 					});
 				}
@@ -134,9 +174,9 @@ Ext.define('bigdata.view.hbase.gethbaseinfo', {
 			}],
 			listeners: {
 				celldblclick: function(a,b,c,record){
-					localStorage.report = JSON.stringify(record.getData());
-					var graph = Ext.create('bigdata.view.result.Graph', {report: record, type: 'dq'});
-					graph.show();
+					// localStorage.report = JSON.stringify(record.getData());
+					// var graph = Ext.create('bigdata.view.result.Graph', {report: record, type: 'dq'});
+					// graph.show();
 				}
 			}
 		}];
